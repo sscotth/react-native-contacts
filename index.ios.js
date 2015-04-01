@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+
 var {
   AppRegistry,
   StyleSheet,
@@ -89,6 +90,7 @@ var AwesomeProject = React.createClass({
 });
 
 var styles = StyleSheet.create({
+
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -96,17 +98,21 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
+
   listView: {
     paddingTop: 20,
     backgroundColor: '#F5FCFF',
   },
+
   name: {
     flex: 2,
     fontSize: 24
   },
+
   infoIcon: {
     flex: 0
   },
+  
   thumbnail: {
     width: 50,
     height: 50,
