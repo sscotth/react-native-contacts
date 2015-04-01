@@ -7,8 +7,7 @@ var {
   Text,
   View,
   Image,
-  ListView,
-  NavigatorIOS
+  ListView
 } = React;
 
 var API_URL = 'http://api.randomuser.me/?results=100';
