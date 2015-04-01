@@ -13,6 +13,8 @@ var {
 
 var API_URL = 'http://api.randomuser.me/?results=100';
 
+var ClientsLoading = require('./ClientsLoading')
+
 var ClientList = React.createClass({
 
   getInitialState: function () {
@@ -42,11 +44,7 @@ var ClientList = React.createClass({
 
   renderLoadingView: function () {
     return (
-      <View style={styles.container}>
-        <Text>
-          Loading client list...
-        </Text>
-      </View>
+      <ClientsLoading />
     );
   },
 
