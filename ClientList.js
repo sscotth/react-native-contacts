@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react-native');
+var fuzzy = require('fuzzysearch');
+var _ = require('lodash');
 
 var {
   StyleSheet,
@@ -34,11 +36,27 @@ var ClientList = React.createClass({
       .then((res) => res.json())
       .then((data) => {
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(data.results),
+          rawData: data.results,
+          dataSource: toListViewDataSource(data.results),
           loaded: true
         })
       })
       .done();
+  },
+
+  filterData: function (query: string) {
+
+    var filteredData = _.filter(this.state.rawData, function (client) {
+      var firstAndLastName = client.user.name.first + ' ' + client.user.name.last;
+
+      return fuzzy(query, firstAndLastName);
+    });
+
+    this.setState({dataSource: toListViewDataSource(filteredData)});
+  },
+
+  toListViewDataSource: function (array) {
+    return this.state.dataSource.cloneWithRows(array);
   },
 
   renderLoadingView: function () {
@@ -60,6 +78,12 @@ var ClientList = React.createClass({
     );
   },
 
+  onSearchChange: function (event: Object) {
+    var query = event.nativeEvent.text.toLowerCase();
+
+    this.filterData(query);
+  },
+
   render: function () {
 
     if (!this.state.loaded) {
@@ -70,6 +94,7 @@ var ClientList = React.createClass({
       <View style={styles.container}>
         <SearchBar
           onFocus={() => this.refs.listview.getScrollResponder().scrollTo(0, 0)}
+          onSearchChange={this.onSearchChange}
         />
         <View style={styles.separator} />
         <ListView
