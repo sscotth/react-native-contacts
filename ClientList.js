@@ -4,15 +4,15 @@ var React = require('react-native');
 
 var {
   StyleSheet,
-  Text,
   View,
-  Image,
   ListView
 } = React;
 
 var API_URL = 'http://api.randomuser.me/?results=100';
 
-var ClientsLoading = require('./ClientsLoading')
+var ClientsLoading = require('./ClientsLoading');
+var SearchBar = require('./SearchBar');
+var ClientRow = require('./ClientRow');
 
 var ClientList = React.createClass({
 
@@ -50,24 +50,14 @@ var ClientList = React.createClass({
   renderClientRow: function (data) {
     var client = data.user;
 
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{uri: client.picture.thumbnail}}
-          style={styles.thumbnail}
-        />
-        <Text style={styles.name}>
-          {this.capitalizeString(client.name.first)} {this.capitalizeString(client.name.last)}
-        </Text>
-        <Text style={styles.infoIcon}>
-          {'info'}
-        </Text>
-      </View>
-    );
-  },
+    var fullName = capitalizeString(client.name.first) + ' ' + capitalizeString(client.name.last);
 
-  capitalizeString: function (s) {
-    return s[0].toUpperCase() + s.slice(1).toLowerCase();
+    return (
+      <ClientRow
+        fullName={fullName}
+        thumbnail={client.picture.thumbnail}
+      />
+    );
   },
 
   render: function () {
@@ -77,11 +67,19 @@ var ClientList = React.createClass({
     }
 
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderClientRow}
-        style={styles.listView}
-      />
+      <View style={styles.container}>
+        <SearchBar
+          onFocus={() => this.refs.listview.getScrollResponder().scrollTo(0, 0)}
+        />
+        <View style={styles.separator} />
+        <ListView
+          ref="listview"
+          dataSource={this.state.dataSource}
+          renderRow={this.renderClientRow}
+          style={styles.listView}
+          automaticallyAdjustContentInsets={false}
+        />
+      </View>
     )
   }
 });
@@ -89,32 +87,22 @@ var ClientList = React.createClass({
 var styles = StyleSheet.create({
 
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    flex: 1
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: '#CCC'
   },
 
   listView: {
     backgroundColor: '#F5FCFF'
-  },
-
-  name: {
-    flex: 2,
-    fontSize: 24
-  },
-
-  infoIcon: {
-    flex: 0
-  },
-
-  thumbnail: {
-    width: 50,
-    height: 50,
-    margin: 10,
-    borderRadius: 25
   }
+
 });
 
 module.exports = ClientList;
+
+function capitalizeString(s) {
+  return s[0].toUpperCase() + s.slice(1).toLowerCase();
+}
