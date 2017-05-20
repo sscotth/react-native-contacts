@@ -8,6 +8,6 @@
   "dependencies": {
     "fuzzysearch": "^1.0.3",
     "lodash": "^3.6.0",
-    "react-native": "^0.3.3"
+    "react-native": "^0.12.0"
   }
 }
